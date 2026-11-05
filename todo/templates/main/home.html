@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todo list</title>
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Todo list</h1>
+
+    <form method="POST" class="add-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>Your todos</h2>
+
+    {% for x in tasks %}
+        {% if not x.is_done %}
+            <div class="task">
+                <div class="task-info">
+                    <h3>{{ x.title }}</h3>
+                    <p>{{ x.description }}</p>
+                </div>
+
+                <form method="POST" action="{% url 'complete_task' x.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-done">Done</button>
+                </form>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+</body>
+</html>
